@@ -1,5 +1,8 @@
+repositories {
+  google()
+}
 apply plugin: 'com.android.application'
-apply plugin: 'com.neenbedankt.android-apt'
+
 
 android {
   def globalConfiguration = rootProject.extensions.getByName("ext")
@@ -19,8 +22,8 @@ android {
   }
 
   compileOptions {
-    sourceCompatibility JavaVersion.VERSION_1_7
-    targetCompatibility JavaVersion.VERSION_1_7
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
   }
 
   packagingOptions {
@@ -58,27 +61,37 @@ android {
 }
 
 dependencies {
+  def diDependencies = rootProject.ext.diDependencies
+  implementation      diDependencies.dagger
+  annotationProcessor diDependencies.daggerCompiler
+  implementation      diDependencies.daggerAndroid
+  implementation      diDependencies.daggerAndroidSupport
+  annotationProcessor diDependencies.daggerAndroidProcessor
+  compileOnly         diDependencies.javaxAnnotation
+  implementation      diDependencies.androidxAnnotations
+
   def presentationDependencies = rootProject.ext.presentationDependencies
   def presentationTestDependencies = rootProject.ext.presentationTestDependencies
   def developmentDependencies = rootProject.ext.developmentDependencies
 
-  compile project(':domain')
-  compile project(':data')
+  implementation project(':domain')
+  implementation project(':data')
 
-  apt presentationDependencies.daggerCompiler
-  compile presentationDependencies.dagger
-  compile presentationDependencies.butterKnife
-  compile presentationDependencies.recyclerView
-  compile presentationDependencies.rxJava
-  compile presentationDependencies.rxAndroid
-  provided presentationDependencies.javaxAnnotation
+  implementation presentationDependencies.butterKnife
+  annotationProcessor presentationDependencies.butterKnifeCompiler
 
-  androidTestCompile presentationTestDependencies.mockito
-  androidTestCompile presentationTestDependencies.dexmaker
-  androidTestCompile presentationTestDependencies.dexmakerMockito
-  androidTestCompile presentationTestDependencies.espresso
-  androidTestCompile presentationTestDependencies.testingSupportLib
+  implementation presentationDependencies.recyclerView
+  implementation presentationDependencies.rxJava
+  implementation presentationDependencies.rxAndroid
+  implementation presentationDependencies.arrow
+
+
+  androidTestImplementation presentationTestDependencies.mockito
+  androidTestImplementation presentationTestDependencies.dexmaker
+  androidTestImplementation presentationTestDependencies.dexmakerMockito
+  androidTestImplementation presentationTestDependencies.espresso
+  androidTestImplementation presentationTestDependencies.testingSupportLib
 
   //Development
-  compile developmentDependencies.leakCanary
+  debugImplementation developmentDependencies.leakCanary
 }

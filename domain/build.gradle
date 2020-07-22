@@ -1,9 +1,10 @@
+repositories {
+  google()
+}
 apply plugin: 'java'
 
-//noinspection GroovyUnusedAssignment
-sourceCompatibility = 1.7
-//noinspection GroovyUnusedAssignment
-targetCompatibility = 1.7
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 configurations {
   provided
@@ -16,16 +17,23 @@ sourceSets {
 }
 
 dependencies {
+  def diDependencies = rootProject.ext.diDependencies
+  implementation      diDependencies.dagger
+  annotationProcessor diDependencies.daggerCompiler
+  implementation      diDependencies.daggerAndroid
+  implementation      diDependencies.daggerAndroidSupport
+  annotationProcessor diDependencies.daggerAndroidProcessor
+  compileOnly         diDependencies.javaxAnnotation
+  implementation      diDependencies.androidxAnnotations
+
   def domainDependencies = rootProject.ext.domainDependencies
   def domainTestDependencies = rootProject.ext.domainTestDependencies
 
-  provided domainDependencies.javaxAnnotation
+  implementation domainDependencies.javaxInject
+  implementation domainDependencies.rxJava
+  implementation domainDependencies.arrow
 
-  compile domainDependencies.javaxInject
-  compile domainDependencies.rxJava
-  compile domainDependencies.arrow
-
-  testCompile domainTestDependencies.junit
-  testCompile domainTestDependencies.mockito
-  testCompile domainTestDependencies.assertj
+  testImplementation domainTestDependencies.junit
+  testImplementation domainTestDependencies.mockito
+  testImplementation domainTestDependencies.assertj
 }

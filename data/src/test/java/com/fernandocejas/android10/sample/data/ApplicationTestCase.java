@@ -16,7 +16,7 @@
 package com.fernandocejas.android10.sample.data;
 
 import android.content.Context;
-import java.io.File;
+
 import org.junit.Rule;
 import org.junit.rules.TestRule;
 import org.junit.runner.RunWith;
@@ -25,12 +25,14 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
+import java.io.File;
+
 /**
  * Base class for Robolectric data layer tests.
  * Inherit from this class to create a test.
  */
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, application = ApplicationStub.class, sdk = 21)
+@Config(application = ApplicationStub.class, sdk = 21)
 public abstract class ApplicationTestCase {
 
   @Rule public TestRule injectMocksRule = (base, description) -> {

@@ -1,15 +1,14 @@
+repositories {
+  google()
+}
 buildscript {
   repositories {
     mavenCentral()
-  }
-  dependencies {
-    classpath 'me.tatarka:gradle-retrolambda:3.2.3'
+    google()
   }
 }
 
 apply plugin: 'com.android.library'
-apply plugin: 'com.neenbedankt.android-apt'
-apply plugin: 'me.tatarka.retrolambda'
 
 android {
   defaultPublishConfig "debug"
@@ -48,20 +47,28 @@ android {
 }
 
 dependencies {
+  def diDependencies = rootProject.ext.diDependencies
+  implementation      diDependencies.dagger
+  annotationProcessor diDependencies.daggerCompiler
+  implementation      diDependencies.daggerAndroid
+  implementation      diDependencies.daggerAndroidSupport
+  annotationProcessor diDependencies.daggerAndroidProcessor
+  compileOnly         diDependencies.javaxAnnotation
+  implementation      diDependencies.androidxAnnotations
+
   def dataDependencies = rootProject.ext.dataDependencies
   def testDependencies = rootProject.ext.dataTestDependencies
 
-  compile project(':domain')
-  provided dataDependencies.javaxAnnotation
-  compile dataDependencies.javaxInject
-  compile dataDependencies.okHttp
-  compile dataDependencies.gson
-  compile dataDependencies.rxJava
-  compile dataDependencies.rxAndroid
-  compile dataDependencies.androidAnnotations
+  implementation project(':domain')
 
-  testCompile testDependencies.junit
-  testCompile testDependencies.assertj
-  testCompile testDependencies.mockito
-  testCompile testDependencies.robolectric
+  implementation dataDependencies.javaxInject
+  implementation dataDependencies.okHttp
+  implementation dataDependencies.gson
+  implementation dataDependencies.rxJava
+  implementation dataDependencies.rxAndroid
+
+  testImplementation testDependencies.junit
+  testImplementation testDependencies.assertj
+  testImplementation testDependencies.mockito
+  testImplementation testDependencies.robolectric
 }
